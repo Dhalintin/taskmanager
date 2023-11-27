@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('login');
 });
 
 Route::get('/dashboard', [TaskController::class, 'view'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -27,6 +27,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::post('/add-task', [TaskController::class, 'addTask'])->name('add-Task');
+    Route::patch('/edit-task/{id}', [TaskController::class, 'updateTask'])->name('edit-Task');
+    Route::delete('/destroy/{id}', [TaskController::class, 'destroy'])->name('delete-Task');
     Route::get('/history', [TaskController::class, 'history'])->name('history');
     Route::get('/stat/{type}', [TaskController::class, 'stat'])->name('stat');
 });

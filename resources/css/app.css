@@ -1,3 +1,46 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Calendar header */
+.fc-header {
+    @apply bg-white
+  }
+  
+  .fc-header-toolbar {
+    @apply px-4 py-2;
+  }
+  
+  .fc-header-title {
+    @apply text-xl font-bold;
+  }
+  
+  /* Day cells */
+  /* .fc-day {
+    @apply bg-white border border-dee2e6;
+  } */
+  
+  /* .fc-day:hover {
+    @apply bg-f8f9fa;
+  }
+   */
+  .fc-day-top {
+    @apply py-1 text-center;
+  }
+  
+  .fc-day-top .fc-day-number {
+    @apply text-lg font-bold;
+  }
+  
+  .fc-day-content {
+    @apply py-1;
+  }
+  
+  /* Event elements */
+  .fc-event {
+    @apply bg-blue-600 text-white rounded-md px-2 py-1;
+  }
+  
+  .fc-event:hover {
+    @apply bg-blue-500;
+  }

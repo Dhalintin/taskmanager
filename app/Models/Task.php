@@ -19,7 +19,7 @@ class Task extends Model
         'comment'
     ];
 
-    public function statuses()
+    public function status()
     {
         return $this->belongsTo(Status::class, 'status_id', 'id');
     }
