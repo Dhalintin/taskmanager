@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Calendar header */
+/* Calendar header
 .fc-header {
     @apply bg-white
   }
@@ -15,15 +15,15 @@
     @apply text-xl font-bold;
   }
   
-  /* Day cells */
-  /* .fc-day {
-    @apply bg-white border border-dee2e6;
-  } */
+  /* Day cells 
+  .fc-day {
+    @apply bg-gray-300
+  }
   
   /* .fc-day:hover {
     @apply bg-f8f9fa;
   }
-   */
+   
   .fc-day-top {
     @apply py-1 text-center;
   }
@@ -36,11 +36,11 @@
     @apply py-1;
   }
   
-  /* Event elements */
+  /* Event elements 
   .fc-event {
     @apply bg-blue-600 text-white rounded-md px-2 py-1;
   }
   
   .fc-event:hover {
     @apply bg-blue-500;
-  }
+  } */
