@@ -7,10 +7,13 @@ use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\Status;
 use App\Models\User;
+use App\Models\Budget;
 use Illuminate\Support\Facades\Auth;
 use ConsoleTVs\Charts\Facades\Charts;
 use DB;
 use App\Chart;
+
+use Illuminate\Database\Eloquent\Builder;
 
 
 class TaskController extends Controller
@@ -21,10 +24,10 @@ class TaskController extends Controller
         $tasks = Task::with('status')->get();
         $color = null;
         foreach($tasks as $task){
-            if($task->status['name'] == 'Completed'){
+            if($task->status['name'] == 'Income'){
                 $color = '#3cb371';
-            }else{
-                $color = null;
+            }else if($task->status['name'] == 'Expenditure'){
+                $color = '#ff0000';
             }
             $events[] = [
                 'id' => $task->id,
@@ -42,7 +45,7 @@ class TaskController extends Controller
     //View Task History
     public function history()
     {
-        $tasks = Task::where('user_id', Auth::user()->id)->with('statuses')->orderBy('created_at', 'desc')->get();
+        $tasks = Task::where('user_id', Auth::user()->id)->with('status')->orderBy('created_at', 'desc')->paginate(9);
         return view('history', compact('tasks'));
     }
 
@@ -52,6 +55,8 @@ class TaskController extends Controller
             $request->validate([
                 'title'=>'required|string|min:2',
                 'description' => 'required',
+                'type' => 'required',
+                'amount' => 'required',
                 'start_date' => 'required',
                 'end_date' => 'required',
             ]);
@@ -61,14 +66,13 @@ class TaskController extends Controller
             $task->title = $request->title;
             $task->description = $request->description;
             $task->start_date = $request->start_date;
-            $task->status_id = 1;
+            $task->status_id = $request->type;
+            $task->amount = $request->amount;
             $task->user_id = Auth::user()->id;
     
             $task->save();
     
             return response()->json($task);
-       
-
     }
 
     public function updateTask(Request $request, $id)
@@ -88,24 +92,25 @@ class TaskController extends Controller
 
     }
 
-    // public function stat($type)
-    // {
-    //     // Get users grouped by age
-    //     $groups = DB::table('tasks')
-    //     ->select('status_id', DB::raw('count(*) as total'))
-    //     ->groupBy('status_id')
-    //     ->pluck('total', 'status_id')->all();
-    //     // Generate random colours for the groups
-    //     for ($i=0; $i<=count($groups); $i++) {
-    //     $colours[] = '#' . substr(str_shuffle('ABCDEF0123456789'), 0, 6);
-    //     }
-    //     // Prepare the data for returning with the view
-    //     $chart = new Chart;
-    //     $chart->labels = (array_keys($groups));
-    //     $chart->dataset = (array_values($groups));
-    //     $chart->colours = $colours;
-    //     return view('charts.index', compact('chart'));
-    // }
+    public function stat($type)
+    {
+        $userid = Auth::user()->id;
+        $tasks = Task::where('user_id', $userid)->get();
+        $totalIncome = 0;
+        $totalExpenses = 0;
+        foreach($tasks as $task){
+            if($task->status_id === 1){
+                $totalIncome += $task['amount'];    
+            }else{
+                $totalExpenses += $task['amount'];
+            }
+            
+        }
+        $income = Task::where('status_id', 2)->where('user_id', $userid)->get();     
+        $percentage = number_format(($totalExpenses / $totalIncome) * 100, 2);
+
+        return view('stat', compact('tasks', 'totalIncome', 'percentage', 'totalExpenses'));
+    }
 
 
     public function destroy($id)
@@ -113,5 +118,23 @@ class TaskController extends Controller
         $task =  Task::findOrFail($id);
         $task->delete();
         return $id;
+    }
+
+    public function budget()
+    {
+        return view('budget');
+    }
+
+    public function budgetapi($mon, $year){
+        // try{
+            $tasks = Task::whereYear('start_date', $year)->whereMonth('start_date', $mon)->get();
+            $budget = Budget::where('month', $mon)->get();
+            dd($budget);
+            return response()->json($budget);
+        // }catch (Exception $e)
+        // {
+        //     return response()->json($e->getMessage());
+        // }
+
     }
 }

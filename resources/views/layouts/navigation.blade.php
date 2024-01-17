@@ -21,6 +21,9 @@
                     <x-nav-link :href="route('stat','bar')" :active="request()->routeIs('stat')" class="md:mr-4">
                         {{ __('Statistics') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('budget')" :active="request()->routeIs('budget')" class="md:mr-4">
+                        {{ __('Budget') }}
+                    </x-nav-link>
                 </div>
             </div>
 

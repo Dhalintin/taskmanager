@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('description');
+            $table->unsignedBigInteger('user_id')->after('description');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('status_id');
             $table->foreign('status_id')->references('id')->on('statuses');
             $table->timestamp('start_date');

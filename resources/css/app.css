@@ -2,7 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Calendar header
+ /* Event elements */
+  .fc-event {
+    @apply bg-red-400 text-white rounded-md px-2 py-1;
+  }
+
+  .month {
+    @apply p-14 bg-gray-300 hover:bg-blue-300 text-center rounded-lg border-blue-300 border-2 font-cambria m-1
+  }
+
+  /* Calendar header
 .fc-header {
     @apply bg-white
   }

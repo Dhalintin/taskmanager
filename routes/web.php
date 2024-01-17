@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('login');
+    return view('welcome');
 });
 
 Route::get('/dashboard', [TaskController::class, 'view'])->middleware(['auth', 'verified'])->name('dashboard');
@@ -31,6 +31,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/destroy/{id}', [TaskController::class, 'destroy'])->name('delete-Task');
     Route::get('/history', [TaskController::class, 'history'])->name('history');
     Route::get('/stat/{type}', [TaskController::class, 'stat'])->name('stat');
+    Route::get('/budget', [TaskController::class, 'budget'])->name('budget');
+    Route::get('/budget/{mon}/{year}', [TaskController::class, 'budgetapi'])->name('budgetA');
+    
 });
 
 require __DIR__.'/auth.php';
